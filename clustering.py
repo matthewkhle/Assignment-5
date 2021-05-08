@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------
 # AUTHOR: Matthew Le
 # FILENAME: clustering.py
-# SPECIFICATION: description of the program
+# SPECIFICATION: Determine the best k value for clustering and run Agglermative clustering
 # FOR: CS 4200- Assignment #5
 # TIME SPENT: 30 Minutes
 #-----------------------------------------------------------*/
