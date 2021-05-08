@@ -1,9 +1,9 @@
 #-------------------------------------------------------------------------
-# AUTHOR: your name
-# FILENAME: title of the source file
+# AUTHOR: Matthew Le
+# FILENAME: association_rule_mining.py
 # SPECIFICATION: description of the program
 # FOR: CS 4200- Assignment #5
-# TIME SPENT: how long it took you to complete the assignment
+# TIME SPENT: 1.5 Hours
 #-----------------------------------------------------------*/
 
 import pandas as pd
@@ -40,13 +40,58 @@ itemset.remove(np.nan)
 
 encoded_vals = []
 for index, row in df.iterrows():
+    bread = 0
+    wine = 0
+    eggs = 0
+    meat = 0
+    cheese = 0
+    pencil = 0
+    diaper = 0
+    milk = 0
+    bagel = 0
 
-    labels = {}
+    try:
+        for item in row:
+            # print(item)
+            if 'Bread' == item:
+                bread = 1
+                
+            if 'Wine' == item:
+                wine = 1
+
+            if 'Eggs' == item:
+                eggs = 1
+
+            if 'Meat' == item:
+                meat = 1
+
+            if 'Cheese' == item:
+                cheese = 1
+
+            if 'Pencil' == item:
+                pencil = 1
+
+            if 'Diaper' == item:
+                diaper = 1
+                
+            if 'Milk' == item:
+                milk = 1
+
+            if 'Bagel' == item:
+                bagel = 1
+
+    except:
+        print("title skipped")
+
+    labels = {"Bread": bread, "Wine": wine, "Eggs": eggs, "Meat": meat, "Cheese": cheese, "Pencil": pencil, "Diaper": diaper, "Milk": milk, "Bagel": bagel}
 
     encoded_vals.append(labels)
 
+
 #adding the populated list with multiple dictionaries to a data frame
 ohe_df = pd.DataFrame(encoded_vals)
+
+# print(ohe_df)
 
 #calling the apriori algorithm informing some parameters
 freq_items = apriori(ohe_df, min_support=0.2, use_colnames=True, verbose=1)
@@ -60,12 +105,25 @@ rules = association_rules(freq_items, metric="confidence", min_threshold=0.6)
 #Prior: 0.4380952380952381
 #Gain in Confidence: 52.17391304347825
 #-->add your python code below
+rules_df = pd.DataFrame(rules)
+for index, row in rules_df.iterrows():
 
-#To calculate the prior and gain in confidence, find in how many transactions the consequent of the rule appears (the supporCount below). Then,
-#use the gain formula provided right after.
-#prior = suportCount/len(encoded_vals) -> encoded_vals is the number of transactions
-#print("Gain in Confidence: " + str(100*(rule_confidence-prior)/prior))
-#-->add your python code below
+    print(str(row[0]) + " -> " + str(row[1]))
+    print("Support: " + str(row[4]))
+    print("Confidence: " + str(row[5]))
+
+
+
+    #To calculate the prior and gain in confidence, find in how many transactions the consequent of the rule appears (the supporCount below). Then,
+    #use the gain formula provided right after.
+    #prior = suportCount/len(encoded_vals) -> encoded_vals is the number of transactions
+    #print("Gain in Confidence: " + str(100*(rule_confidence-prior)/prior))
+    #-->add your python code below
+    prior = min(rules['antecedent support'][i], rules['consequent support'][i])
+    print("Prior: " + str(prior))
+ 
+    print("Gain in Confidence: " + str(100*(row[5]-prior)/prior))
+    print()
 
 #Finally, plot support x confidence
 plt.scatter(rules['support'], rules['confidence'], alpha=0.5)
